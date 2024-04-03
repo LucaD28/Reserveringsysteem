@@ -40,10 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const requestedTimeslot: TimeSlot | undefined = timeslotsWithCapacity.find(timeslot => timeslot.id === id);
 
         if (requestedTimeslot) {
-            // There is an open spot for the requested timeslot
-            // Perform your desired flow here
-            // For example:
-            // res.status(200).json({ message: 'Open spot available for the requested timeslot!' });
             const reservation : Reservation = {
                 id: uuidv4(),
                 email: email,
