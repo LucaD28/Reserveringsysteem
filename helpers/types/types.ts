@@ -6,6 +6,7 @@ export type TimeSlot = {
     end_time: string;
     capacity: number;
     remaining_capacity?: number;
+    reservations?: ReservationShort[];
 }
 
 export type Data = {
@@ -23,4 +24,10 @@ export type Reservation = {
     name: string;
     status: string;
     date: string;
+}
+
+export type ReservationShort = {
+    id: string;
+    name: string;
+    email: string;
 }
