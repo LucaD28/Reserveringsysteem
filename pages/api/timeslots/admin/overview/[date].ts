@@ -27,7 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 start_time: timeslot.start_time,
                 end_time: timeslot.end_time,
                 capacity: timeslot.capacity,
-                reservations: timeslot.reservations
+                reservations: timeslot.reservations,
+                template_id: timeslot.template_id
             }
         })
         res.status(200).json({ timeslots: timeslotsWithCapacity });

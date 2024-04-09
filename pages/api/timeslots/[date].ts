@@ -12,9 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (typeof date !== "string") {
         return res.status(400).json({error: "Invalid date format!"})
     }
-    // Inside your API route or wherever you need to fetch timeslots
-    const { data: timeslots, error } = await supabase
-    .rpc('fetch_timeslots', { date_param: date }); // Use the actual date you want to query for
+    
+    const { data: timeslots, error } = await supabase.rpc('fetch_timeslots', { date_param: date });
 
     if (error) {
         return res.status(500).json({error: `An error occurred while fetching timeslots! ${error.message}`})

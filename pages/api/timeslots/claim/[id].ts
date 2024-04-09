@@ -15,10 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         return res.status(405).json({ error: "Method not allowed!" });
     }
 
-    const validationResult = validateRequestBody(req.body, ['date', 'type', 'email', 'name']);
-    if (!validationResult.valid) {
-        return res.status(400).json({ error: `Missing required fields: ${validationResult.missingFields?.join(', ')}` });
-    }
+    // const validationResult = validateRequestBody(req.body, ['date', 'type', 'email', 'name']);
+    // if (!validationResult.valid) {
+    //     return res.status(400).json({ error: `Missing required fields: ${validationResult.missingFields?.join(', ')}` });
+    // }
 
     const { id } = req.query;
 

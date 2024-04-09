@@ -7,6 +7,8 @@ export type TimeSlot = {
     capacity: number;
     remaining_capacity?: number;
     reservations?: ReservationShort[];
+    type? : TimeSlotType;
+    template_id?: string;
 }
 
 export type Data = {
@@ -14,7 +16,7 @@ export type Data = {
     error?: string;
 }
 
-export type TimeSlotType = 'timeslot_template' | 'timeslot_override';
+export type TimeSlotType = "timeslot_template" | "timeslot_override";
 
 export type Reservation = {
     id: string;

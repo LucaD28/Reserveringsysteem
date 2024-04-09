@@ -21,9 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if(!data || data?.length === 0){
         return res.status(404).json({ error: "Reservation not found!" })
     }
+
     const {error} = await supabase.from('reservation').delete().eq('id', id)
     if(error){
         return res.status(500).json({ error: "Error while deleting reservation!" })
     }
+    
     return res.status(200).json({ error: null })
 }
