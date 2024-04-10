@@ -8,7 +8,7 @@ import { Data, TimeSlot } from "../../../../../helpers/types/types";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
 
-    if (req.method !== "GET") {
+    if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed!" });
     }
 
@@ -17,6 +17,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (typeof date !== "string") {
         return res.status(400).json({ error: "Invalid date format!" });
     }
+    const token = req.headers.authorization?.split(' ')[1];
+    const refresh_token = req.body.refresh_token;
+    
+    supabase.auth.setSession({
+        access_token: token,
+        refresh_token: refresh_token,
+    });
+
 
     try {
         const {data} = await supabase.rpc('get_timeslots_with_reservations', { date_param: date });

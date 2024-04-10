@@ -14,6 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const { id } = req.query;
     const default_capacity = req.body.default_capacity;
+    const token = req.headers.authorization?.split(' ')[1];
+    const refresh_token = req.body.refresh_token;
+    
+    supabase.auth.setSession({
+        access_token: token,
+        refresh_token: refresh_token,
+    });
+
     if (typeof id !== "string") {
         return res.status(400).json({ error: "Invalid id format!" });
     }

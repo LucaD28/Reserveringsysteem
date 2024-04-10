@@ -12,6 +12,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         return res.status(405).json({ error: "Method not allowed!" });
     }
 
+    const token = req.headers.authorization?.split(' ')[1];
+    const refresh_token = req.body.refresh_token;
+    
+    supabase.auth.setSession({
+        access_token: token,
+        refresh_token: refresh_token,
+    });
+
     const { id } = req.query;
     const date = req.body.date;
     const adjusted_capacity = req.body.adjusted_capacity;
