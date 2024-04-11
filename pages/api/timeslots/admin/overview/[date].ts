@@ -3,6 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import supabase from "../../../../../helpers/supabase";
 import { Data, TimeSlot } from "../../../../../helpers/types/types";
+import validateSession from "../../../../../helpers/commonfunctions/setsession";
 
 
 
@@ -11,19 +12,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed!" });
     }
-
+    validateSession(req);
     const { date } = req.query;
+
 
     if (typeof date !== "string") {
         return res.status(400).json({ error: "Invalid date format!" });
     }
-    const token = req.headers.authorization?.split(' ')[1];
-    const refresh_token = req.body.refresh_token;
     
-    supabase.auth.setSession({
-        access_token: token,
-        refresh_token: refresh_token,
-    });
 
 
     try {

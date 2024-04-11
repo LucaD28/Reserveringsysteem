@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import supabase from "../../../helpers/supabase"
 import { Data } from "../../../helpers/types/types"
-
+//NOT USED
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     if(req.method !== "GET") {
         return res.status(405).json({error: "Method not allowed!"})

@@ -3,27 +3,26 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import supabase from "../../../../../helpers/supabase";
 import { Data, TimeSlot } from "../../../../../helpers/types/types";
+import validateSession from "../../../../../helpers/commonfunctions/setsession";
 
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<{error: string}>) {
 
-    if (req.method !== "POST") {
+    if (req.method !== "PUT") {
         return res.status(405).json({ error: "Method not allowed!" });
     }
-
+    validateSession(req);
     const { id } = req.query;
     const default_capacity = req.body.default_capacity;
-    const token = req.headers.authorization?.split(' ')[1];
-    const refresh_token = req.body.refresh_token;
-    
-    supabase.auth.setSession({
-        access_token: token,
-        refresh_token: refresh_token,
-    });
+
 
     if (typeof id !== "string") {
         return res.status(400).json({ error: "Invalid id format!" });
+    }
+
+    if (typeof default_capacity !== "number") {
+        return res.status(400).json({ error: "Invalid default_capacity format!" });
     }
 
 

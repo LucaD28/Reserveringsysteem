@@ -23,9 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { id } = req.query;
 
     const key : string = req.body.key;
-
     if (typeof id !== "string") {
         return res.status(400).json({ error: "Invalid uuid format!" });
+    }
+    if (typeof key !== "string") {
+        return res.status(400).json({ error: "Invalid key format!" });
     }
 
     const {data} = await supabase.from('reservation').select('id').eq('id', id).eq('key', key);  
