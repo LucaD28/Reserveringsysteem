@@ -218,6 +218,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
  
   - Error (405 Method Not Allowed): The provided request method is not valid.
   - Error (400 Bad Request): The given id is not of the required UUID format OR the given key is not of the required UUID format.
+  - Error (404 Not Found): The given reservation id could not be found.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
 -------------------------------------------------------------------------------------------
