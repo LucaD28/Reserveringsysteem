@@ -44,7 +44,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   - Error (404 Not Found): The given reservation id could not be found.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
-
+-------------------------------------------------------------------------------------------
 
   *PUT /timeslots/admin/edit*
  
@@ -68,7 +68,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   - Error (400 Bad Request): The given duration is not of the required number type.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
-
+-------------------------------------------------------------------------------------------
 
   *POST /timeslots/admin/override/[id]*
  
@@ -92,7 +92,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   - Error (400 Bad Request): The given id is not of the required UUID type OR The given adjusted_capacity is not of the required number type.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
-
+-------------------------------------------------------------------------------------------
 
   *POST /timeslots/admin/overview/[date]*
  
@@ -141,7 +141,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   - Error (400 Bad Request): The given date is not properly formatted.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
-
+-------------------------------------------------------------------------------------------
 
   *PUT /timeslots/admin/template/[id]*
  
