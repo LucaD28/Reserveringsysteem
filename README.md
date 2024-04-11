@@ -18,17 +18,149 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+**API ENDPOINTS**
 
-To learn more about Next.js, take a look at the following resources:
+**ADMIN**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  *DELETE /timeslots/admin/cancel/[id]*
+ 
+  Description: Cancels a reservation made by a user.
+ 
+  URL Parameters: "id" // Required. The reservation id.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  Request Body:
+  {
+    "refresh_token": string, // Required. The Admin's refresh token.
+  }
+ 
+  Response:
+  - Success (200 OK):
+    {
+      "error" : null // No error.
+    }
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
+  - Error (400 Bad Request): The given id is not in a proper UUID format.
+  - Error (404 Not Found): The given reservation id could not be found.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  *PUT /timeslots/admin/edit*
+ 
+  Description: Updates the duration of timeslots in the database.
+ 
+  URL Parameters: NONE
+
+  Request Body:
+  {
+    "refresh_token": string, // Required. The Admin's refresh token.
+    "duration": number, // Required. The new timeslot duration.
+  }
+ 
+  Response:
+  - Success (200 OK):
+    {
+      "error" : null // No error.
+    }
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
+  - Error (400 Bad Request): The given duration is not of the required number type.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
+
+
+
+  *POST /timeslots/admin/override/[id]*
+ 
+  Description: Overrides a specific timeslot's capacity with a new capacity.
+ 
+  URL Parameters: "id" // Required. The id of the timeslot_template you want to override.
+
+  Request Body:
+  {
+    "refresh_token": string, // Required. The Admin's refresh token.
+    "adjusted_capacity": number, // Required. The new timeslot duration.
+  }
+ 
+  Response:
+  - Success (200 OK):
+    {
+      "error" : null // No error.
+    }
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
+  - Error (400 Bad Request): The given id is not of the required UUID type OR The given adjusted_capacity is not of the required number type.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
+
+
+
+  *POST /timeslots/admin/overview/[date]*
+ 
+  Description: Gives an overview of all the timeslots on a specific date including reservations that have been made on each timeslot.
+ 
+  URL Parameters: "date" // Required. The date of the timeslots you want to see, must be formatted like: "2024-04-01" for April 1st 2024
+
+  Request Body:
+  {
+    "refresh_token": string, // Required. The Admin's refresh token.
+  }
+ 
+  Response:
+  - Success (200 OK):
+    {
+      "timeslots" : [
+                {
+            "id": "84562aea-32a6-4c3a-b960-dd4d5f53d55b", // id of the timeslot
+            "date": "2024-04-11", // date of the timeslot
+            "start_time": "23:00:00", // start time of the timeslot
+            "end_time": "23:15:00", // end time of the timeslot
+            "capacity": 0, // capacity of the timeslot
+            "reservations": null, // reservations for the timeslot
+            "template_id": "84562aea-32a6-4c3a-b960-dd4d5f53d55b" // template id that the timeslot references
+        },
+        {
+            "id": "fe423d1b-7b6f-4562-953b-c70cf0d558a7", // id of the timeslot
+            "date": "2024-04-11", // date of the timeslot
+            "start_time": "00:00:00", // start time of the timeslot
+            "end_time": "00:15:00", // end time of the timeslot
+            "capacity": 1, // capacity of the timeslot
+            "reservations": [
+                {
+                    "id": "b57e2e80-8688-4384-a1c6-dc7d671c7274", // id of the reservation
+                    "name": "Luca", // name of the person who made a reservation
+                    "email": "luca@gmail.com" // email of the person who made a reservation
+                }
+            ],
+            "template_id": "84bf6049-cd56-4dd3-8f51-767e3faa2fea" // template id that the timeslot references
+        },
+      ]
+
+    }
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
+  - Error (400 Bad Request): The given date is not properly formatted.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
+
+
+
+  *PUT /timeslots/admin/template/[id]*
+ 
+  Description: Change the default capacity of a timeslot template (a repeating timeslot).
+ 
+  URL Parameters: "id" // Required. The id of the timeslot_template you want to adjust.
+
+  Request Body:
+  {
+    "refresh_token": string, // Required. The Admin's refresh token.
+    "default_capacity": number, // Required. The new timeslot duration.
+  }
+ 
+  Response:
+  - Success (200 OK):
+    {
+      "error" : null // No error.
+    }
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
+  - Error (400 Bad Request): The given id is not of the required UUID type OR The given default_capacity is not of the required number type.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
