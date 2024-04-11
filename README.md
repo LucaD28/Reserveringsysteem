@@ -46,7 +46,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 -------------------------------------------------------------------------------------------
 
-  *PUT /timeslots/admin/edit*
+  *PUT /timeslots/admin/edit/duration*
  
   Description: Updates the duration of timeslots in the database.
  
