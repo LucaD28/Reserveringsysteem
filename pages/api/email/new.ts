@@ -24,6 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }else if(type == 'reservation_confirmation'){
         text = `Beste ${reservation.name}, \nHierbij de bevestiging dat uw reservering op ${reservation.date} is ontvangen.\nAls u de reservering wilt annuleren kan dat via ${process.env.NEXT_PUBLIC_WEBSITE_URL}/cancel?key=${reservation.key}&id=${reservation.id}&name=${encodeURIComponent(reservation.name)}&email=${reservation.email}&date=${reservation.date}`
         subject = 'Reserveringsbevestiging'
+    }else if(type == 'cancel_confirmation_admin'){
+        text = `Beste ${reservation.name}, \nHelaas hebben wij uw reservering op ${reservation.date} moeten annuleren.\nSorry voor het ongemak. \nVoor het maken van een nieuwe reservering kunt u terecht op ${process.env.NEXT_PUBLIC_WEBSITE_URL}.`
+        subject = 'Annulering Reservering'
     }
 
     if (!reservation) return res.status(500).json({error: "No reservation provided"});

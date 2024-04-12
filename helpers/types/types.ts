@@ -18,7 +18,7 @@ export type Data = {
 
 export type TimeSlotType = "timeslot_template" | "timeslot_override";
 
-export type EmailType = "reservation_confirmation" | "cancel_confirmation"
+export type EmailType = "reservation_confirmation" | "cancel_confirmation" | "cancel_confirmation_admin"
 
 export type Reservation = {
     id: string;
