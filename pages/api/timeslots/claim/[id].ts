@@ -9,7 +9,7 @@ import validateRequestBody from "../../../../helpers/commonfunctions/validatereq
 
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<{error: string}>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<{error?: string; data?: {id: string; key?: string;};}>) {
 
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed!" });
@@ -48,12 +48,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 status: 'Confirmed',
                 timeslot_override: type == 'timeslot_override' ? id : null,
                 timeslot_template: type == 'timeslot_template' ? id : null,
+                key: uuidv4()
             }
             const {data, error} = await supabase.from('reservation').insert(reservation)
             if(error){
                 return res.status(500).json({error: error.message})
             }else{
-                return res.status(200).json({error: null})
+                return res.status(200).json({error: null, data: {id: reservation.id, key: reservation.key}})
             }
         } else {
             return res.status(400).json({ error: `No open spot available for the requested timeslot!` });

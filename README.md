@@ -240,11 +240,44 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   Response:
   - Success (200 OK):  
     {  
-      "error" : null // No error.   
+      "error" : null // No error.  
+      "data":  {  
+          "id": "1234",  
+          "key": "1234",  
+      }   
     }  
  
   - Error (405 Method Not Allowed): The provided request method is not valid.
   - Error (400 Bad Request): The given id is not of the required UUID format OR the given key is not of the required UUID format.
+  - Error (500 Internal Server Error): Something went wrong while processing the request.
+
+-------------------------------------------------------------------------------------------
+
+  *POST /email/new*
+ 
+  Description: Send a confirmation email to a user.
+ 
+  URL Parameters: NONE 
+
+  Request Body: 
+  {  
+    "type": string, // Required. The type of email it is, must either be 'reservation_confirmation' OR 'cancel_confirmation' 
+    "reservation": {  
+      "name" : string, // Required. The name of the person who made the reservation.  
+      "date" : string, // Required. The date of the reservation.  
+      "key" : string, // Required if of type 'reservation_confirmation'. The key needed to cancel the reservation.  
+      "id" : string, // Required. The ID of the reservation.  
+      "email" : string, // Required. The email of the person who made the reservation.  
+    }  
+  }  
+ 
+  Response:
+  - Success (200 OK):  
+    {  
+      "error" : null // No error.  
+    }  
+ 
+  - Error (405 Method Not Allowed): The provided request method is not valid.
   - Error (500 Internal Server Error): Something went wrong while processing the request.
 
 -------------------------------------------------------------------------------------------
