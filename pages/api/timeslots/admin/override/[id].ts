@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     validateSession(req);
 
     const { id } = req.query;
-    const date = req.body.date;
-    const adjusted_capacity = req.body.adjusted_capacity;
+    const date : string = req.body.date;
+    const adjusted_capacity : number = req.body.adjusted_capacity;
     if (typeof id !== "string") {
         return res.status(400).json({ error: "Invalid id format!" });
     }

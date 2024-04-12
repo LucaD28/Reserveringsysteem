@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     const validationResult = validateRequestBody(req.body, ['key']);
+    
     if (!validationResult.valid) {
         return res.status(400).json({ error: `Missing required fields: ${validationResult.missingFields?.join(', ')}` });
     }

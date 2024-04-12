@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
     validateSession(req);
     const { id } = req.query;
-    const default_capacity = req.body.default_capacity;
+    const default_capacity : number = req.body.default_capacity;
 
 
     if (typeof id !== "string") {

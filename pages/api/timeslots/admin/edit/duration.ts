@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     validateSession(req);
 
-    const duration = req.body.duration;
+    const duration : number = req.body.duration;
 
     if (typeof duration !== "number") {
         return res.status(400).json({ error: "Invalid duration format!" });

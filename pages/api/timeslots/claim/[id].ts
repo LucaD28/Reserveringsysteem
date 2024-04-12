@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     try {
-        const timeslotsWithCapacity = await fetchTimeslots(date);
+        const timeslotsWithCapacity : TimeSlot[] = await fetchTimeslots(date);
         const requestedTimeslot: TimeSlot | undefined = timeslotsWithCapacity.find(timeslot => timeslot.id === id);
 
         if (requestedTimeslot) {
