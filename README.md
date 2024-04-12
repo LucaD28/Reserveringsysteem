@@ -261,7 +261,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
   Request Body: 
   {  
-    "type": string, // Required. The type of email it is, must either be 'reservation_confirmation' OR 'cancel_confirmation' 
+    "type": string, // Required. The type of email it is, must either be 'reservation_confirmation' OR 'cancel_confirmation' OR 'cancel_confirmation_admin' 
     "reservation": {  
       "name" : string, // Required. The name of the person who made the reservation.  
       "date" : string, // Required. The date of the reservation.  
