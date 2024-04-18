@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from 'react'
 import { TimeSlot, TimeSlotType } from '../helpers/types/types'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { uuid } from 'uuidv4'
+
 export default function Home() {
+  const supabase = createClientComponentClient();
   const [date, setDate] = useState(formatDate(new Date(Date.now())))
   const [timeSlots, setTimeSlots] = useState([])
   const [sortedTimeSlots, setSortedTimeSlots] = useState([])
@@ -17,6 +21,8 @@ export default function Home() {
   const [confirmEmailError, setConfirmEmailError] = useState(false)
   const [confirmEmail, setConfirmEmail] = useState("")
   const [success, setSuccess] = useState(false);
+  const [reserving, setReserving] = useState(false);
+  const [reservedId, setReservedId] = useState("")
   const popupRef = useRef(null);
   interface RequestBody {
     date: string;
@@ -24,6 +30,14 @@ export default function Home() {
     name: string;
     type: TimeSlotType;
   } 
+
+  useEffect(() => {
+    if(!selectedTimeSlot){ 
+      setReservedId("");
+      return; 
+    }
+    reserveSlot(selectedTimeSlot);
+  }, [selectedTimeSlot])
 
   useEffect(() => {
     const sorted = timeSlots.sort((a, b) => a.start_time.localeCompare(b.start_time));
@@ -49,6 +63,7 @@ export default function Home() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
+        removeReservation();
         setSelectedTimeSlot(null); 
       }
     };
@@ -79,6 +94,7 @@ export default function Home() {
 
   function handleTimeSlotSelection(value){
     setSelectedTimeSlot(value)
+    reserveSlot(value);
   }
 
   function reformatDate(date: string) : string{
@@ -143,6 +159,7 @@ export default function Home() {
       name: naam,
       type: selectedTimeSlot.type
     }
+    await removeReservation();
     const res = await fetch(`/api/timeslots/claim/${selectedTimeSlot.id}`, 
     {
       method : "POST", 
@@ -200,6 +217,34 @@ export default function Home() {
       return;
     }
   }
+
+  async function reserveSlot(timeslot){
+    if(reserving) return;
+    setReserving(true);
+    const id = uuid();
+    setReservedId(id);
+    const {data, error} = await supabase.from('reservation').insert({
+      id: id,
+      timeslot_template: timeslot.type == 'timeslot_template' ? timeslot.id : null,
+      timeslot_override: timeslot.type == 'timeslot_override' ? timeslot.id : null,
+      status: 'Reserved',
+      date: timeslot.date
+    })
+    console.log(data);
+    
+    if(error){
+      alert(error)
+    }
+    setReserving(false);
+  }
+
+  async function removeReservation(){
+    if(!reservedId) return;
+    const {error} = await supabase.from('reservation').delete().eq('id', reservedId).eq('status', 'Reserved')
+    if(error){
+      alert(error)
+    }
+  }
   
 
 
@@ -215,7 +260,7 @@ export default function Home() {
           <p className='font-bold text-2xl'>Tijdslots:</p>
           {sortedTimeSlots.length > 0 ? <div className='flex flex-col items-start gap-2 max-h-[1440px] flex-wrap'>
             {sortedTimeSlots.map((timeslot, index) => {
-              return (<button onClick={() => {handleTimeSlotSelection(timeslot)}} key={index} className='text-black px-5 py-1 border-2 border-black hover:bg-slate-200'>{timeslot.start_time + " - " + timeslot.end_time + " | " + timeslot.remaining_capacity + `${timeslot.remaining_capacity == 1 ? ' Plek vrij' : ' Plekken vrij'}`}</button>)
+              return (<button onClick={() => {handleTimeSlotSelection(timeslot);}} key={index} className='text-black px-5 py-1 border-2 border-black hover:bg-slate-200'>{timeslot.start_time + " - " + timeslot.end_time + " | " + timeslot.remaining_capacity + `${timeslot.remaining_capacity == 1 ? ' Plek vrij' : ' Plekken vrij'}`}</button>)
             })}
           </div> 
           : 
@@ -227,7 +272,7 @@ export default function Home() {
           <div ref={popupRef} className='z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-black bg-white w-1/2 h-fit flex flex-col gap-10 py-3'>
             <div className='flex flex-row justify-between mx-5'>
               <h2 className='text-2xl'>{"Tijdslot: " + reformatDate(selectedTimeSlot.date) + " (" + selectedTimeSlot.start_time + " - " + selectedTimeSlot.end_time + ")"}</h2>
-              <button onClick={() => {setSelectedTimeSlot(null); setSuccess(false);}} className='text-3xl font-semibold select-none hover:text-red-600'>X</button>
+              <button onClick={() => {removeReservation(); setSelectedTimeSlot(null); setSuccess(false);}} className='text-3xl font-semibold select-none hover:text-red-600'>X</button>
             </div>
             {!success && <div className='flex flex-col gap-4 w-1/2 ml-5'>
               <div>

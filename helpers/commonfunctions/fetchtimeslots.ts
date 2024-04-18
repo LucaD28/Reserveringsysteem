@@ -2,7 +2,7 @@ import { NextApiResponse } from "next";
 import supabase from "../supabase";
 import { TimeSlot } from "../types/types";
 
-// Function to fetch timeslots, calculate remaining capacity, and filter timeslots
+// Function that fetches timeslots, calculates remaining capacity, and filters timeslots
 export default async function fetchTimeslots(date: string): Promise<TimeSlot[]> {
 
     const { data: timeslots, error } = await supabase.rpc('fetch_timeslots', { date_param: date });

@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import supabase from "../../../../helpers/supabase";
 import fetchTimeslots from "../../../../helpers/commonfunctions/fetchtimeslots";
 import { Data, TimeSlot } from "../../../../helpers/types/types";
+import cleanreservations from "../../../../helpers/commonfunctions/cleanreservations";
 
 
 
@@ -20,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     try {
+        await cleanreservations();
         const timeslotsWithCapacity : TimeSlot[] = await fetchTimeslots(date);
         res.status(200).json({ timeslots: timeslotsWithCapacity });
     } catch (error) {
