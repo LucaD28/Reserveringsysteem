@@ -65,6 +65,7 @@ export default function Home() {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         removeReservation();
         setSelectedTimeSlot(null); 
+        setSuccess(false)
       }
     };
   
